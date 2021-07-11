@@ -52,6 +52,9 @@ class RegisterFragment : Fragment() {
                     Log.d("Body:", response.body().toString())
                     Log.d("Headers:", response.headers().toString())
 
+                    // navigate to onboarding
+                    findNavController().navigate(R.id.action_registerFragment_to_viewPagerFragment)
+
                 }else{
                     // Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT).show()
 
