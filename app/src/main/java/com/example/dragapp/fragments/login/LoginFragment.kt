@@ -7,28 +7,36 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.dragapp.R
+import com.example.dragapp.databinding.FragmentLoginBinding
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class LoginFragment : Fragment() {
 
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_login, container, false)
+        // data binding
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        // set so ViewModel livedata can be observed from layout
+        //binding.lifecycleOwner = this // works only with databinding layout
 
-        view.loginButton.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
         }
 
-        view.registerButton.setOnClickListener {
+        binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
 
 
-        return view;
+        return binding.root;
     }
 
 }
