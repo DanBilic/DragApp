@@ -7,8 +7,7 @@ import retrofit2.Response
 
 class DragRepository {
 
-    suspend fun login(): Response<TokenResult> {
-        val loginData = Login("dan@gmail.com", "123456")
+    suspend fun login(loginData: Login): Response<TokenResult> {
         return RetrofitInstance.api.login(loginData)
     }
 }

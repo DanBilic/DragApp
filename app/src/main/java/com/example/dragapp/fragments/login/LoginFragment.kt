@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.dragapp.R
 import com.example.dragapp.databinding.FragmentLoginBinding
+import com.example.dragapp.models.Login
 import com.example.dragapp.repositories.DragRepository
 import com.example.dragapp.viewmodels.DragViewModel
 import com.example.dragapp.viewmodels.DragViewModelFactory
@@ -39,13 +40,14 @@ class LoginFragment : Fragment() {
         val dragRepository = DragRepository()
         val dragViewModelFactory = DragViewModelFactory(dragRepository)
         mDragViewModel = ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
-        mDragViewModel.login()
+        val loginData = Login("dan@gmail.com", "123456")
+        mDragViewModel.login(loginData)
         mDragViewModel.loginData.observe(viewLifecycleOwner, Observer { response ->
             if(response.isSuccessful){
                 Log.d("Body:", response.body().toString())
                 Log.d("Headers:", response.headers().toString())
             }else{
-                Log.d("Body:", response.body().toString())
+                Log.d("Error:", response.body().toString())
             }
         })
 
