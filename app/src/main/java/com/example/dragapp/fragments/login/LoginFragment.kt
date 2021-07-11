@@ -52,12 +52,13 @@ class LoginFragment : Fragment() {
                 if(response.isSuccessful){
                     Log.d("Body:", response.body().toString())
                     Log.d("Headers:", response.headers().toString())
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
                 }else{
                     Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT).show()
 
                 }
             })
-            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+
         }
 
         binding.registerButton.setOnClickListener {
