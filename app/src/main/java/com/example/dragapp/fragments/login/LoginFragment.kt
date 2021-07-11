@@ -36,22 +36,27 @@ class LoginFragment : Fragment() {
         // set so ViewModel livedata can be observed from layout
         //binding.lifecycleOwner = this // works only with databinding layout
 
+
         // DragViewModel init
         val dragRepository = DragRepository()
         val dragViewModelFactory = DragViewModelFactory(dragRepository)
         mDragViewModel = ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
-        val loginData = Login("dan@gmail.com", "123456")
-        mDragViewModel.login(loginData)
-        mDragViewModel.loginData.observe(viewLifecycleOwner, Observer { response ->
-            if(response.isSuccessful){
-                Log.d("Body:", response.body().toString())
-                Log.d("Headers:", response.headers().toString())
-            }else{
-                Log.d("Error:", response.body().toString())
-            }
-        })
 
         binding.loginButton.setOnClickListener {
+            val email = binding.emailEt.text.toString()
+            val password = binding.passwordEt.text.toString()
+            val loginData = Login(email, password)
+
+            mDragViewModel.login(loginData)
+            mDragViewModel.loginData.observe(viewLifecycleOwner, Observer { response ->
+                if(response.isSuccessful){
+                    Log.d("Body:", response.body().toString())
+                    Log.d("Headers:", response.headers().toString())
+                }else{
+                    Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT).show()
+
+                }
+            })
             findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
         }
 
