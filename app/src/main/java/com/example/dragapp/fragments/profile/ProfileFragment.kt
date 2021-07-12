@@ -55,8 +55,20 @@ class ProfileFragment : Fragment() {
 
         mDragViewModel.currentUserData.observe(viewLifecycleOwner, Observer { response ->
             if(response.isSuccessful) {
-                Log.d("Profile Body:", response.body().toString())
+                Log.d("Profile Body:", response.body()?.success.toString())
                 Log.d("Profile Headers:", response.headers().toString())
+
+                val userName = response.body()?.data.toString()
+                val userEmail = response.body()?.data.toString()
+
+
+                Log.d("Profile name:", userName)
+                Log.d("Profile email:", userEmail)
+
+
+                binding.userNameTv.text =  response.body()?.data?.name.toString()
+                binding.userEmailTv.text =  response.body()?.data?.email.toString()
+
             }else{
                 Log.d("Profile Error:", response.errorBody().toString())
                 Log.d("Profile interceptor:", RetrofitInterceptor.authToken)
