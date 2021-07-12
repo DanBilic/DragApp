@@ -58,14 +58,6 @@ class RegisterFragment : Fragment() {
 
                     Log.d("register tokenString:", tokenString)
 
-
-                    var tokenFromDataStore: String
-                    mAppViewModel.readFromDataStore.observe(viewLifecycleOwner, Observer { myToken ->
-                        tokenFromDataStore = myToken
-                        Log.d("register data store token:", tokenFromDataStore)
-
-                    })
-
                     // save token to data store
                     mAppViewModel.saveToDataStore(tokenString)
 

@@ -62,15 +62,8 @@ class LoginFragment : Fragment() {
                     val token = response.body()?.token.toString()
                     val tokenString = "Bearer $token"
 
-                    Log.d("tokenString:", tokenString)
+                    Log.d("login tokenString:", tokenString)
 
-
-                    var tokenFromDataStore: String
-                    mAppViewModel.readFromDataStore.observe(viewLifecycleOwner, Observer { myToken ->
-                        tokenFromDataStore = myToken
-                        Log.d("data store token:", tokenFromDataStore)
-
-                    })
 
                     // save token to data store
                     mAppViewModel.saveToDataStore(tokenString)
