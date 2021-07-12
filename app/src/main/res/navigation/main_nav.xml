@@ -29,11 +29,6 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/dashboardFragment"
-        android:name="com.example.dragapp.fragments.dashboard.DashboardFragment"
-        android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-    <fragment
         android:id="@+id/viewPagerFragment"
         android:name="com.example.dragapp.onboarding.ViewPagerFragment"
         android:label="fragment_view_pager"
