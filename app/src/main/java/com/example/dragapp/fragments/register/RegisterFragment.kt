@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.dragapp.R
+import com.example.dragapp.api.RetrofitInterceptor
 import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.databinding.FragmentRegisterBinding
 import com.example.dragapp.models.Register
@@ -60,6 +61,7 @@ class RegisterFragment : Fragment() {
 
                     // save token to data store
                     mAppViewModel.saveToDataStore(tokenString)
+                    RetrofitInterceptor.setRequestHeaderToken(tokenString)
 
                     // navigate to onboarding
                     findNavController().navigate(R.id.action_registerFragment_to_viewPagerFragment)

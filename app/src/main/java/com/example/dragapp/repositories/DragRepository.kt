@@ -4,6 +4,7 @@ import com.example.dragapp.api.RetrofitInstance
 import com.example.dragapp.models.Login
 import com.example.dragapp.models.Register
 import com.example.dragapp.models.TokenResult
+import com.example.dragapp.models.Result
 import retrofit2.Response
 
 class DragRepository {
@@ -14,5 +15,9 @@ class DragRepository {
 
     suspend fun register(registerData: Register): Response<TokenResult>{
         return RetrofitInstance.api.register(registerData)
+    }
+
+    suspend fun currentUser(): Response<Result>{
+        return RetrofitInstance.api.getCurrentUser()
     }
 }

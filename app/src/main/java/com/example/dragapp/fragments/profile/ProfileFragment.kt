@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.dragapp.api.RetrofitInstance
+import com.example.dragapp.api.RetrofitInterceptor
 import com.example.dragapp.databinding.FragmentProfileBinding
 import com.example.dragapp.repositories.DragRepository
 import com.example.dragapp.viewmodels.AppViewModel
@@ -21,6 +23,8 @@ class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+
+    private var tokenFromDataStore = "none"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,11 +43,25 @@ class ProfileFragment : Fragment() {
 
         mAppViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
-        var tokenFromDataStore: String
+
         mAppViewModel.readFromDataStore.observe(viewLifecycleOwner, Observer { myToken ->
             tokenFromDataStore = myToken
             Log.d("PROFILE: data store token:", tokenFromDataStore)
 
+        })
+
+
+        mDragViewModel.currentUser()
+
+        mDragViewModel.currentUserData.observe(viewLifecycleOwner, Observer { response ->
+            if(response.isSuccessful) {
+                Log.d("Profile Body:", response.body().toString())
+                Log.d("Profile Headers:", response.headers().toString())
+            }else{
+                Log.d("Profile Error:", response.errorBody().toString())
+                Log.d("Profile interceptor:", RetrofitInterceptor.authToken)
+
+            }
         })
 
 

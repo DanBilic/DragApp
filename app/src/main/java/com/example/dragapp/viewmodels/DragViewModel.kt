@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dragapp.models.Login
 import com.example.dragapp.models.Register
 import com.example.dragapp.models.TokenResult
+import com.example.dragapp.models.Result
 import com.example.dragapp.repositories.DragRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -13,6 +14,7 @@ import retrofit2.Response
 class DragViewModel (private val repository: DragRepository): ViewModel(){
     val loginData : MutableLiveData<Response<TokenResult>> = MutableLiveData()
     val registerData : MutableLiveData<Response<TokenResult>> = MutableLiveData()
+    val currentUserData : MutableLiveData<Response<Result>> = MutableLiveData()
 
     fun login(loginInput: Login){
         viewModelScope.launch {
@@ -23,6 +25,12 @@ class DragViewModel (private val repository: DragRepository): ViewModel(){
     fun register(registerInput: Register){
         viewModelScope.launch {
             registerData.value = repository.register((registerInput))
+        }
+    }
+
+    fun currentUser(){
+        viewModelScope.launch {
+            currentUserData.value = repository.currentUser()
         }
     }
 }
