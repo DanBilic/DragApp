@@ -1,5 +1,6 @@
 package com.example.dragapp.fragments.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.dragapp.DashboardActivity
 import com.example.dragapp.R
 import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.models.Login
@@ -52,7 +54,10 @@ class LoginFragment : Fragment() {
                 if(response.isSuccessful){
                     Log.d("Body:", response.body().toString())
                     Log.d("Headers:", response.headers().toString())
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+
+                    val intent = Intent(activity, DashboardActivity::class.java)
+                    activity?.startActivity(intent)
+                    // findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
                 }else{
                     Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT).show()
 

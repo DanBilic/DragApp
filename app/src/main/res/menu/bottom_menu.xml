@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile"/>
+    <item
+        android:id="@+id/discoverFragment"
+        android:title="Discover"
+        android:icon="@drawable/ic_discover"/>
+    <item
+        android:id="@+id/statsFragment"
+        android:title="Stats"
+        android:icon="@drawable/ic_stats"/>
+</menu>
