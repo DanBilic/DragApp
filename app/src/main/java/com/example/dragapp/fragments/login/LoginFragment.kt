@@ -16,6 +16,7 @@ import com.example.dragapp.R
 import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.models.Login
 import com.example.dragapp.repositories.DragRepository
+import com.example.dragapp.viewmodels.AppViewModel
 import com.example.dragapp.viewmodels.DragViewModel
 import com.example.dragapp.viewmodels.DragViewModelFactory
 import kotlinx.android.synthetic.main.fragment_login.view.*
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 class LoginFragment : Fragment() {
 
     private lateinit var mDragViewModel: DragViewModel
+    private lateinit var mAppViewModel: AppViewModel
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -44,6 +46,8 @@ class LoginFragment : Fragment() {
         val dragViewModelFactory = DragViewModelFactory(dragRepository)
         mDragViewModel = ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
 
+        mAppViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
+
         binding.loginButton.setOnClickListener {
             val email = binding.emailEt.text.toString()
             val password = binding.passwordEt.text.toString()
@@ -55,9 +59,29 @@ class LoginFragment : Fragment() {
                     Log.d("Body:", response.body().toString())
                     Log.d("Headers:", response.headers().toString())
 
+                    val token = response.body()?.token.toString()
+                    val tokenString = "Bearer $token"
+
+                    Log.d("tokenString:", tokenString)
+
+
+                    var tokenFromDataStore: String
+                    mAppViewModel.readFromDataStore.observe(viewLifecycleOwner, Observer { myToken ->
+                        tokenFromDataStore = myToken
+                        Log.d("data store token:", tokenFromDataStore)
+
+                    })
+
+                    // save token to data store
+                    mAppViewModel.saveToDataStore(tokenString)
+
+
                     val intent = Intent(activity, DashboardActivity::class.java)
                     activity?.startActivity(intent)
                     // findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+
+
+
                 }else{
                     Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT).show()
 

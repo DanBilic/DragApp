@@ -15,12 +15,14 @@ import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.databinding.FragmentRegisterBinding
 import com.example.dragapp.models.Register
 import com.example.dragapp.repositories.DragRepository
+import com.example.dragapp.viewmodels.AppViewModel
 import com.example.dragapp.viewmodels.DragViewModel
 import com.example.dragapp.viewmodels.DragViewModelFactory
 
 class RegisterFragment : Fragment() {
 
     private lateinit var mDragViewModel: DragViewModel
+    private lateinit var mAppViewModel: AppViewModel
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
@@ -40,6 +42,8 @@ class RegisterFragment : Fragment() {
         val dragViewModelFactory = DragViewModelFactory(dragRepository)
         mDragViewModel = ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
 
+        mAppViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
+
         binding.registerButton.setOnClickListener {
             val name = binding.registerNameEt.text.toString()
             val email = binding.registerEmailEt.text.toString()
@@ -49,8 +53,21 @@ class RegisterFragment : Fragment() {
             mDragViewModel.register(registerData)
             mDragViewModel.registerData.observe(viewLifecycleOwner, Observer {  response ->
                 if(response.isSuccessful){
-                    Log.d("Body:", response.body().toString())
-                    Log.d("Headers:", response.headers().toString())
+                    val token = response.body()?.token.toString()
+                    val tokenString = "Bearer $token"
+
+                    Log.d("register tokenString:", tokenString)
+
+
+                    var tokenFromDataStore: String
+                    mAppViewModel.readFromDataStore.observe(viewLifecycleOwner, Observer { myToken ->
+                        tokenFromDataStore = myToken
+                        Log.d("register data store token:", tokenFromDataStore)
+
+                    })
+
+                    // save token to data store
+                    mAppViewModel.saveToDataStore(tokenString)
 
                     // navigate to onboarding
                     findNavController().navigate(R.id.action_registerFragment_to_viewPagerFragment)
