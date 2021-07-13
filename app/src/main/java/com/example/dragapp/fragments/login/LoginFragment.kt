@@ -2,6 +2,7 @@ package com.example.dragapp.fragments.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -45,7 +46,8 @@ class LoginFragment : Fragment() {
         // DragViewModel init
         val dragRepository = DragRepository()
         val dragViewModelFactory = DragViewModelFactory(dragRepository)
-        mDragViewModel = ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
+        mDragViewModel =
+            ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
 
         mAppViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
@@ -54,43 +56,40 @@ class LoginFragment : Fragment() {
             val password = binding.passwordEt.text.toString()
             val loginData = Login(email, password)
 
-            mDragViewModel.login(loginData)
-            mDragViewModel.loginData.observe(viewLifecycleOwner, Observer { response ->
-                if(response.isSuccessful){
-                    Log.d("Body:", response.body().toString())
-                    Log.d("Headers:", response.headers().toString())
+            if (TextUtils.isEmpty(email)) {
+                binding.emailEt.error = "Please Enter Your E-Mail";
+            } else if (TextUtils.isEmpty(password)) {
+                binding.passwordEt.error = "Please Enter Your Password";
+            } else {
+                mDragViewModel.login(loginData)
+                mDragViewModel.loginData.observe(viewLifecycleOwner, Observer { response ->
+                    if (response.isSuccessful) {
+                        Log.d("Body:", response.body().toString())
+                        Log.d("Headers:", response.headers().toString())
 
-                    val token = response.body()?.token.toString()
-                    val tokenString = "Bearer $token"
+                        val token = response.body()?.token.toString()
+                        val tokenString = "Bearer $token"
 
-                    Log.d("login tokenString:", tokenString)
+                        Log.d("login tokenString:", tokenString)
 
+                        // save token to data store
+                        mAppViewModel.saveToDataStore(tokenString)
+                        RetrofitInterceptor.setRequestHeaderToken(tokenString)
 
-                    // save token to data store
-                    mAppViewModel.saveToDataStore(tokenString)
-                    RetrofitInterceptor.setRequestHeaderToken(tokenString)
-
-
-                    val intent = Intent(activity, DashboardActivity::class.java)
-                    activity?.startActivity(intent)
-                    // findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
-
-
-
-                }else{
-                    Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT).show()
-
-                }
-            })
-
+                        val intent = Intent(activity, DashboardActivity::class.java)
+                        activity?.startActivity(intent)
+                        // findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                    } else {
+                        Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+            }
         }
 
         binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
-
-
-
         return binding.root;
     }
 
