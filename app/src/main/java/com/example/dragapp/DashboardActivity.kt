@@ -1,7 +1,13 @@
 package com.example.dragapp
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
@@ -9,9 +15,12 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.dragapp.services.Notification
 import com.example.dragapp.services.UserLocation
+import com.example.dragapp.utils.Constants
 import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -19,6 +28,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var locationCallback: LocationCallback
     private var currentLatitude: Double = 0.0
     private var currentLongitude: Double = 0.0
+    lateinit var alarmManager: AlarmManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +39,8 @@ class DashboardActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         requestUserLocation()
+        createNotificationChannel()
+        setAlarm()
     }
 
     private fun requestUserLocation() {
@@ -87,5 +99,44 @@ class DashboardActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         requestUserLocation()
+    }
+
+    fun setAlarm() {
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, Notification::class.java)
+        var pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP, setAlarmTime(8, 0).timeInMillis,
+            AlarmManager.INTERVAL_DAY, pendingIntent
+        )
+    }
+
+    fun setAlarmTime(hour: Int, minute: Int) : Calendar {
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val cur: Calendar = Calendar.getInstance()
+        if (cur.after(calendar)) {
+            calendar.add(Calendar.DATE, 1)
+        }
+        // calendar.set(Calendar.MINUTE, Calendar.MINUTE+1)
+        return calendar
+    }
+
+    fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = Constants.CHANNEL_ID
+            val descriptionText = "Used for Event Notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager!!.createNotificationChannel(channel)
+        }
     }
 }
