@@ -1,5 +1,7 @@
 package com.example.dragapp.fragments.profile
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +14,8 @@ import com.example.dragapp.api.RetrofitInstance
 import com.example.dragapp.api.RetrofitInterceptor
 import com.example.dragapp.databinding.FragmentProfileBinding
 import com.example.dragapp.repositories.DragRepository
+import com.example.dragapp.utils.AskPermissions
+import com.example.dragapp.utils.Constants
 import com.example.dragapp.viewmodels.AppViewModel
 import com.example.dragapp.viewmodels.DragViewModel
 import com.example.dragapp.viewmodels.DragViewModelFactory
@@ -36,6 +40,9 @@ class ProfileFragment : Fragment() {
         // set so ViewModel livedata can be observed from layout
         //binding.lifecycleOwner = this // works only with databinding layout
 
+        val askPermission = AskPermissions(requireContext(), requireActivity())
+        askPermission.setupGalleryPermissions()
+
         // DragViewModel init
         val dragRepository = DragRepository()
         val dragViewModelFactory = DragViewModelFactory(dragRepository)
@@ -50,7 +57,6 @@ class ProfileFragment : Fragment() {
 
         })
 
-
         mDragViewModel.currentUser()
 
         mDragViewModel.currentUserData.observe(viewLifecycleOwner, Observer { response ->
@@ -64,9 +70,28 @@ class ProfileFragment : Fragment() {
             }
         })
 
+        binding.profilePictureCiv.setOnClickListener{
+            selectImageInAlbum()
+        }
 
         return binding.root
 
+    }
+
+    fun selectImageInAlbum() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Constants.PICK_IMAGE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == Constants.PICK_IMAGE) {
+            val imageUri = data?.data
+            binding.profilePictureCiv.setImageURI(imageUri)
+            //saveToDatabase()
+
+        }
     }
 
 }

@@ -16,14 +16,13 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.dragapp.R
 import com.example.dragapp.databinding.FragmentSecondScreenBinding
+import com.example.dragapp.utils.AskPermissions
+import com.example.dragapp.utils.Constants
 import com.google.android.material.snackbar.Snackbar
 
 class SecondScreen : Fragment() {
     private var _binding: FragmentSecondScreenBinding? = null
     private val binding get() = _binding!!
-    private val REQUEST_CODE = 42
-    private val RECORD_REQUEST_CODE = 101
-    val PICK_IMAGE = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,12 +33,13 @@ class SecondScreen : Fragment() {
 
         val viewPager = activity?.findViewById<ViewPager2>(R.id.viewPager)
 
-        setupPermissions()
+        val askPermission = AskPermissions(requireContext(), requireActivity())
+        askPermission.setupGalleryPermissions()
 
         binding.pictureButton.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (takePictureIntent.resolveActivity(activity?.packageManager!!) != null) {
-                startActivityForResult(takePictureIntent, REQUEST_CODE)
+                startActivityForResult(takePictureIntent, Constants.REQUEST_CODE)
             } else {
                 Snackbar.make(it, "Unable to open camera", Snackbar.LENGTH_SHORT).show()
             }
@@ -55,36 +55,17 @@ class SecondScreen : Fragment() {
         return binding.root
     }
 
-    private fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            makeRequest()
-        }
-    }
-
-    private fun makeRequest() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            RECORD_REQUEST_CODE
-        )
-    }
-
     fun selectImageInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Constants.PICK_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == Constants.PICK_IMAGE) {
             val imageUri = data?.data
             binding.pictureIv.setImageURI(imageUri)
-        } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+        } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE) {
             val takenImage = data?.extras?.get("data") as Bitmap
             binding.pictureIv.setImageBitmap(takenImage)
         } else {
