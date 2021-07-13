@@ -57,9 +57,9 @@ class LoginFragment : Fragment() {
             val loginData = Login(email, password)
 
             if (TextUtils.isEmpty(email)) {
-                binding.emailEt.error = "Please Enter Your E-Mail";
+                binding.emailTip.error = "Please Enter Your E-Mail";
             } else if (TextUtils.isEmpty(password)) {
-                binding.passwordEt.error = "Please Enter Your Password";
+                binding.passwordTip.error = "Please Enter Your Password";
             } else {
                 mDragViewModel.login(loginData)
                 mDragViewModel.loginData.observe(viewLifecycleOwner, Observer { response ->

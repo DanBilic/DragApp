@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.dragapp.R
 import com.example.dragapp.api.RetrofitInterceptor
-import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.databinding.FragmentRegisterBinding
 import com.example.dragapp.models.Register
 import com.example.dragapp.repositories.DragRepository
@@ -42,7 +41,8 @@ class RegisterFragment : Fragment() {
         // DragViewModel init
         val dragRepository = DragRepository()
         val dragViewModelFactory = DragViewModelFactory(dragRepository)
-        mDragViewModel = ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
+        mDragViewModel =
+            ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
 
         mAppViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
@@ -53,15 +53,16 @@ class RegisterFragment : Fragment() {
             val password2 = binding.registerPassword2Et.text.toString()
 
             if (TextUtils.isEmpty(email)) {
-                binding.registerEmailEt.error = "Please Enter Your E-Mail"
+                binding.registerEmailTil.error = "Please Enter Your E-Mail"
             } else if (TextUtils.isEmpty(password)) {
-                binding.registerPasswordEt.error = "Please Enter Your Password"
+                binding.registerPasswordTil.error = "Please Enter Your Password"
             } else if (TextUtils.isEmpty(password2)) {
-                binding.registerPassword2Et.error = "Please Enter Your Password"
+                binding.registerPassword2Til.error = "Please Enter Your Password"
             } else if (TextUtils.isEmpty(name)) {
-                binding.registerNameEt.error = "Please Enter Your User Name"
-            } else if (password != password2){
-                Toast.makeText(requireContext(), "Passwords Do Not Match", Toast.LENGTH_SHORT).show()
+                binding.registerNameTil.error = "Please Enter Your User Name"
+            } else if (password != password2) {
+                Toast.makeText(requireContext(), "Passwords Do Not Match", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 val registerData = Register(name, email, password)
                 mDragViewModel.register(registerData)
@@ -81,13 +82,11 @@ class RegisterFragment : Fragment() {
 
                     } else {
                         // Toast.makeText(requireContext(), "Invalid credentials", Toast.LENGTH_SHORT).show()
-
                     }
+
                 })
             }
         }
-
-
         return binding.root
     }
 
