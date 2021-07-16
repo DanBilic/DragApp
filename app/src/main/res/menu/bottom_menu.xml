@@ -10,7 +10,7 @@
         android:title="Discover"
         android:icon="@drawable/ic_discover"/>
     <item
-        android:id="@+id/statsFragment"
+        android:id="@+id/appUsageFragment"
         android:title="Stats"
         android:icon="@drawable/ic_stats"/>
 </menu>

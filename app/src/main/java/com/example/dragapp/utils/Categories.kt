@@ -1,4 +1,4 @@
-package com.example.dragapp.onboarding
+package com.example.dragapp.utils
 
 object Categories {
     val categoriesList : List<String>

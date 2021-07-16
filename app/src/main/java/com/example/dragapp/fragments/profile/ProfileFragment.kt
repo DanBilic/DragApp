@@ -10,11 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.dragapp.api.RetrofitInstance
 import com.example.dragapp.api.RetrofitInterceptor
 import com.example.dragapp.databinding.FragmentProfileBinding
 import com.example.dragapp.repositories.DragRepository
-import com.example.dragapp.utils.AskPermissions
+import com.example.dragapp.services.AskPermissions
 import com.example.dragapp.utils.Constants
 import com.example.dragapp.viewmodels.AppViewModel
 import com.example.dragapp.viewmodels.DragViewModel
@@ -51,7 +50,7 @@ class ProfileFragment : Fragment() {
         mAppViewModel = ViewModelProvider(this).get(AppViewModel::class.java)
 
 
-        mAppViewModel.readFromDataStore.observe(viewLifecycleOwner, Observer { myToken ->
+        /*mAppViewModel.readFromDataStore.observe(viewLifecycleOwner, Observer { myToken ->
             tokenFromDataStore = myToken
             Log.d("PROFILE: data store token:", tokenFromDataStore)
 
@@ -68,7 +67,7 @@ class ProfileFragment : Fragment() {
                 Log.d("Profile interceptor:", RetrofitInterceptor.authToken)
 
             }
-        })
+        })*/
 
         binding.profilePictureCiv.setOnClickListener{
             selectImageInAlbum()

@@ -13,8 +13,11 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.dragapp.models.AppUsageModel
+import com.example.dragapp.models.CheckAppsVisible
 import com.example.dragapp.services.Notification
 import com.example.dragapp.services.UserLocation
 import com.example.dragapp.utils.Constants
@@ -38,9 +41,19 @@ class DashboardActivity : AppCompatActivity() {
         val navController = findNavController(R.id.fragmentContainerView)
         bottomNavigationView.setupWithNavController(navController)
 
-        requestUserLocation()
+        AppUsageModel.setContext(this)
+        // CheckAppsVisible.setContext(this)
+        //TODO:does not work requestUserLocation()
+        askAppUsagePermission()
         createNotificationChannel()
         setAlarm()
+    }
+
+    fun askAppUsagePermission(){
+        val appUsageModel = AppUsageModel()
+        if (!appUsageModel.checkUsageStatePermission()) {
+            startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        }
     }
 
     private fun requestUserLocation() {

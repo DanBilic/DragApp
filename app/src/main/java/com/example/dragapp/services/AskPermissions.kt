@@ -1,27 +1,18 @@
-package com.example.dragapp.utils
+package com.example.dragapp.services
 
 import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
-import android.os.Looper
-import android.provider.Settings
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.dragapp.services.UserLocation
-import com.google.android.gms.location.*
+import androidx.core.content.ContextCompat.startActivity
+import com.example.dragapp.models.AppUsageModel
+import com.example.dragapp.utils.Constants
+import android.provider.Settings
 
 class AskPermissions(private val context: Context, private val activity:Activity) {
-
-    fun askAppUsagePermission(){
-        /*val appUsageModel = AppUsageModel()
-        if (!appUsageModel.checkUsageStatePermission()) {
-            startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-        }*/
-    }
 
     fun setupGalleryPermissions() {
         val permission = ContextCompat.checkSelfPermission(

@@ -16,8 +16,8 @@
         android:label="fragment_discover"
         tools:layout="@layout/fragment_discover" />
     <fragment
-        android:id="@+id/statsFragment"
-        android:name="com.example.dragapp.fragments.stats.StatsFragment"
+        android:id="@+id/appUsageFragment"
+        android:name="com.example.dragapp.fragments.appUsage.AppUsageFragment"
         android:label="fragment_stats"
-        tools:layout="@layout/fragment_stats" />
+        tools:layout="@layout/fragment_app_usage" />
 </navigation>

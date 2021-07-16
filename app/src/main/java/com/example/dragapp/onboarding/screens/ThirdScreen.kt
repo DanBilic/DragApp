@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dragapp.DashboardActivity
 import com.example.dragapp.databinding.FragmentThirdScreenBinding
-import com.example.dragapp.onboarding.Categories
+import com.example.dragapp.utils.Categories
 import com.example.dragapp.onboarding.ChipAdapter
 import kotlinx.android.synthetic.main.chip_element.view.*
 

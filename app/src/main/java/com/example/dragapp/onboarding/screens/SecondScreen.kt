@@ -1,9 +1,7 @@
 package com.example.dragapp.onboarding.screens
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,12 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.dragapp.R
 import com.example.dragapp.databinding.FragmentSecondScreenBinding
-import com.example.dragapp.utils.AskPermissions
+import com.example.dragapp.services.AskPermissions
 import com.example.dragapp.utils.Constants
 import com.google.android.material.snackbar.Snackbar
 
