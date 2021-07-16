@@ -122,6 +122,14 @@ class DashboardActivity : AppCompatActivity() {
             AlarmManager.RTC_WAKEUP, setAlarmTime(8, 0).timeInMillis,
             AlarmManager.INTERVAL_DAY, pendingIntent
         )
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP, setAlarmTime(12, 0).timeInMillis,
+            AlarmManager.INTERVAL_DAY, pendingIntent
+        )
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP, setAlarmTime(18, 0).timeInMillis,
+            AlarmManager.INTERVAL_DAY, pendingIntent
+        )
     }
 
     fun setAlarmTime(hour: Int, minute: Int) : Calendar {
