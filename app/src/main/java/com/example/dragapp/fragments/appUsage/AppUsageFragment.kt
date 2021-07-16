@@ -15,15 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dragapp.R
 import com.example.dragapp.databinding.ActivityDashboardBinding.inflate
+import com.example.dragapp.databinding.FragmentAppUsageBinding
 import com.example.dragapp.models.AppUsageModel
 
 
 class AppUsageFragment : Fragment() {
 
-    //Todo does not work:
-    private lateinit var recyclerView: RecyclerView
-    //private var _binding: AppUsageFragment? = null
-    // private val binding get() = _binding!!
+    private var _binding: FragmentAppUsageBinding? = null
+    private val binding get() = _binding!!
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
@@ -32,17 +31,15 @@ class AppUsageFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        //_binding = AppUsageFragment.inflate(inflater, container, false)
-        val view = inflater.inflate(R.layout.app_usage_card, container, false)
+        _binding = FragmentAppUsageBinding.inflate(inflater, container, false)
         val appUsageModel = AppUsageModel()
 
         if (appUsageModel.checkUsageStatePermission()) {
             appUsageModel.getUsageStatsSocialAppsDay()
             appUsageModel.groupList()
-            recyclerView = view.findViewById(R.id.appUsage_recycler)
             val layoutManager = LinearLayoutManager(activity)
-            recyclerView.layoutManager = layoutManager
-            recyclerView.adapter = AppUsageAdapter(AppUsageModel.appUsageSelected)
+            binding.appUsageRecycler.layoutManager = layoutManager
+            binding.appUsageRecycler.adapter = AppUsageAdapter(AppUsageModel.appUsageSelected)
         } else {
             startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         }
