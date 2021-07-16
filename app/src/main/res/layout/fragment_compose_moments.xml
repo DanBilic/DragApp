@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appComposeBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/composeAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darker_green"
+            app:title="@string/compose_layout"
+            app:titleTextColor="@color/black" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:id="@+id/addPictureButton"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_margin="8dp"
+        android:layout_marginStart="30dp"
+        android:backgroundTint="@color/light_green"
+        android:text="@string/add_picture"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appComposeBar"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/postButton"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/light_green"
+        android:text="@string/post"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:layout_constraintStart_toEndOf="@+id/addPictureButton"
+        app:layout_constraintTop_toBottomOf="@+id/appComposeBar" />
+
+    <EditText
+        android:id="@+id/inputMoments"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="20dp"
+        android:autofillHints="Your input..."
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addPictureButton"
+        tools:ignore="LabelFor,MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintTop_toBottomOf="@id/inputMoments"
+        app:srcCompat="@drawable/avatar"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

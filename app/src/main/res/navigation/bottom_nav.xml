@@ -20,4 +20,24 @@
         android:name="com.example.dragapp.fragments.appUsage.AppUsageFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_app_usage" />
+    <fragment
+        android:id="@+id/momentsFragment"
+        android:name="com.example.dragapp.fragments.moments.MomentsFragment"
+        android:label="MomentsFragment" >
+        <action
+            android:id="@+id/action_momentsFragment_to_composeMomentsFragment"
+            app:destination="@id/composeMomentsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/composeMomentsFragment"
+        android:name="com.example.dragapp.fragments.moments.ComposeMomentsFragment"
+        android:label="ComposeMomentsFragment" >
+        <action
+            android:id="@+id/action_composeMomentsFragment_to_momentsFragment"
+            app:destination="@id/momentsFragment"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 </navigation>
