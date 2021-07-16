@@ -7,15 +7,11 @@ import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.graphics.drawable.DrawableCompat.inflate
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.dragapp.R
-import com.example.dragapp.databinding.ActivityDashboardBinding.inflate
 import com.example.dragapp.databinding.FragmentAppUsageBinding
+import com.example.dragapp.models.AppUsageAdapter
 import com.example.dragapp.models.AppUsageModel
 
 

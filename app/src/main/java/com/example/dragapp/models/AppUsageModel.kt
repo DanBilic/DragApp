@@ -12,7 +12,7 @@ import android.os.Process.myUid
 import androidx.annotation.RequiresApi
 import androidx.core.app.AppOpsManagerCompat.MODE_ALLOWED
 import com.example.dragapp.R
-import com.example.dragapp.fragments.appUsage.AppUsageData
+import com.example.dragapp.utils.AppUsageData
 import com.example.dragapp.utils.SocialApps
 import java.text.SimpleDateFormat
 import java.util.*

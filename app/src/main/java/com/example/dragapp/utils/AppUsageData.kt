@@ -1,4 +1,4 @@
-package com.example.dragapp.fragments.appUsage
+package com.example.dragapp.utils
 
 data class AppUsageData(
     val packageName: String,

@@ -1,4 +1,4 @@
-package com.example.dragapp.fragments.discover
+package com.example.dragapp.models
 
 import android.view.LayoutInflater
 import android.view.View

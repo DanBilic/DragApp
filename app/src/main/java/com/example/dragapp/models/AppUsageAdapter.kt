@@ -1,4 +1,4 @@
-package com.example.dragapp.fragments.appUsage
+package com.example.dragapp.models
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dragapp.R
+import com.example.dragapp.utils.AppUsageData
 
 class AppUsageAdapter(private val dataSet: List<AppUsageData>) :
     RecyclerView.Adapter<AppUsageAdapter.MyViewHolder>() {

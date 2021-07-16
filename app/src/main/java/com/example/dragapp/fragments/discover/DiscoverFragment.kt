@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.dragapp.databinding.FragmentDiscoverBinding
+import com.example.dragapp.models.DiscoverAdapter
 
 class DiscoverFragment : Fragment() {
     // private lateinit var discoverDataConnection: DiscoverDataConnection
