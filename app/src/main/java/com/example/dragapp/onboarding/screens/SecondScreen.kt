@@ -1,11 +1,14 @@
 package com.example.dragapp.onboarding.screens
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,12 +22,19 @@ import com.example.dragapp.databinding.FragmentSecondScreenBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.fragment_second_screen.view.*
 
 
 class SecondScreen : Fragment() {
+
+    companion object{
+        private const val CAMERA = 1
+    }
 
     private var _binding: FragmentSecondScreenBinding? = null
     private val binding get() = _binding!!
@@ -45,12 +55,15 @@ class SecondScreen : Fragment() {
             // Toast.makeText(requireContext(), "Camera clicked", Toast.LENGTH_SHORT).show()
             Dexter.withContext(requireContext()).withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                // Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA
             ).withListener(object: MultiplePermissionsListener{
                 override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    if(report!!.areAllPermissionsGranted()){
-                        Toast.makeText(requireContext(), "Camera permission granted", Toast.LENGTH_SHORT).show()
+                    report?.let{
+                        if(report.areAllPermissionsGranted()){
+                            val intent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                            startActivityForResult(intent, CAMERA)
+                        }
                     }
                 }
 
@@ -58,7 +71,7 @@ class SecondScreen : Fragment() {
                     permissions: MutableList<PermissionRequest>?,
                     token: PermissionToken?
                 ) {
-                    showRasionaleDialogForPermissions()
+                    showRationaleDialogForPermissions()
                 }
 
             }).onSameThread().check()
@@ -66,22 +79,26 @@ class SecondScreen : Fragment() {
 
         binding.galleryBt.setOnClickListener {
             // Toast.makeText(requireContext(), "Gallery clicked", Toast.LENGTH_SHORT).show()
-            Dexter.withContext(requireContext()).withPermissions(
+            Dexter.withContext(requireContext()).withPermission(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            ).withListener(object: MultiplePermissionsListener{
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    if(report!!.areAllPermissionsGranted()){
-                        Toast.makeText(requireContext(), "Gallery permission granted", Toast.LENGTH_SHORT).show()
-                    }
+            ).withListener(object: PermissionListener{
+                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                    Toast.makeText(requireContext(), "You have Gallery permission, to select an image!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                    Toast.makeText(requireContext(), "You have denied Gallery permission, to select an image!", Toast.LENGTH_SHORT)
+                        .show()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
+                    p0: PermissionRequest?,
+                    p1: PermissionToken?
                 ) {
-                    showRasionaleDialogForPermissions()
+                    showRationaleDialogForPermissions()
                 }
+
 
             }).onSameThread().check()
         }
@@ -95,7 +112,19 @@ class SecondScreen : Fragment() {
         return binding.root
     }
 
-    private fun showRasionaleDialogForPermissions() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == CAMERA){
+                data?.extras?.let{
+                    val thumbnail : Bitmap = data.extras!!.get("data") as Bitmap
+                    binding.profileImage.setImageBitmap(thumbnail)
+                }
+            }
+        }
+    }
+
+    private fun showRationaleDialogForPermissions() {
         AlertDialog.Builder(requireContext()).setMessage("Truned of Permissions")
             .setPositiveButton("Go to settings"){
                 _,_ ->
