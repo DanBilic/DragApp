@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -27,9 +28,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.example.dragapp.DashboardActivity
 import com.example.dragapp.R
+import com.example.dragapp.api.RetrofitInterceptor
 import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.databinding.FragmentSecondScreenBinding
+import com.example.dragapp.repositories.DragRepository
+import com.example.dragapp.viewmodels.DragViewModel
+import com.example.dragapp.viewmodels.DragViewModelFactory
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -39,6 +45,12 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.fragment_second_screen.view.*
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -48,6 +60,11 @@ import java.util.*
 
 class SecondScreen : Fragment() {
 
+    private lateinit var mDragViewModel: DragViewModel
+    private var _binding: FragmentSecondScreenBinding? = null
+    private val binding get() = _binding!!
+    private var mImagePath : String = ""
+
     companion object{
         private const val CAMERA = 1
         private const val GALLERY = 2
@@ -55,9 +72,6 @@ class SecondScreen : Fragment() {
         private const val IMAGE_DIRECTORY = "DragAppImages"
     }
 
-    private var _binding: FragmentSecondScreenBinding? = null
-    private val binding get() = _binding!!
-    private var mImagePath : String = ""
 
 
     override fun onCreateView(
@@ -70,6 +84,12 @@ class SecondScreen : Fragment() {
         _binding = FragmentSecondScreenBinding.inflate(inflater, container, false)
         // set so ViewModel livedata can be observed from layout
         //binding.lifecycleOwner = this // works only with databinding layout
+
+        // DragViewModel init
+        val dragRepository = DragRepository()
+        val dragViewModelFactory = DragViewModelFactory(dragRepository)
+        mDragViewModel = ViewModelProvider(this, dragViewModelFactory).get(DragViewModel::class.java)
+
 
         binding.cameraBt.setOnClickListener {
             // Toast.makeText(requireContext(), "Camera clicked", Toast.LENGTH_SHORT).show()
@@ -147,6 +167,24 @@ class SecondScreen : Fragment() {
 
                     mImagePath = saveImageToInternalStorage(thumbnail)
                     Log.i("Profile Image PATH:", mImagePath)
+
+                    uploadImage()
+                    mDragViewModel.currentProfileImageData.observe(viewLifecycleOwner, { response ->
+                        if(response.isSuccessful){
+                            Log.d("Body:", response.body().toString())
+                            Log.d("Headers:", response.headers().toString())
+
+                            val imageString = response.body()?.data.toString()
+
+
+                            Log.d("Image String:", imageString)
+
+
+                        }else{
+                            Toast.makeText(requireContext(), "error image upload", Toast.LENGTH_SHORT).show()
+
+                        }
+                    })
                 }
             }
             if(requestCode == GALLERY){
@@ -178,12 +216,15 @@ class SecondScreen : Fragment() {
                                 resource?.let{
                                     val bitmap: Bitmap = resource.toBitmap()
                                     mImagePath = saveImageToInternalStorage(bitmap)
+
                                 }
                                 return false
                             }
 
                         })
                         .into(binding.profileImage)
+
+
                 }
             }
         }else if(resultCode == Activity.RESULT_CANCELED){
@@ -226,6 +267,16 @@ class SecondScreen : Fragment() {
         }
 
         return file.absolutePath
+    }
+
+    private fun uploadImage(){
+        val file = File(mImagePath)
+
+        val requestBody = RequestBody.create("image/*".toMediaType(), file)
+        val parts = MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+        mDragViewModel.uploadProfileImage(parts)
+
     }
 
 }
