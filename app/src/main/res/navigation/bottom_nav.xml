@@ -14,7 +14,11 @@
         android:id="@+id/discoverFragment"
         android:name="com.example.dragapp.fragments.discover.DiscoverFragment"
         android:label="fragment_discover"
-        tools:layout="@layout/fragment_discover" />
+        tools:layout="@layout/fragment_discover" >
+        <action
+            android:id="@+id/action_discoverFragment_to_addEventFragment"
+            app:destination="@id/addEventFragment" />
+    </fragment>
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.example.dragapp.fragments.stats.StatsFragment"
@@ -24,5 +28,27 @@
         android:id="@+id/momentsFragment"
         android:name="com.example.dragapp.fragments.moments.MomentsFragment"
         android:label="fragment_moments"
-        tools:layout="@layout/fragment_moments" />
+        tools:layout="@layout/fragment_moments" >
+        <action
+            android:id="@+id/action_momentsFragment_to_addMomentFragment"
+            app:destination="@id/addMomentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEventFragment"
+        android:name="com.example.dragapp.fragments.discover.AddEventFragment"
+        android:label="fragment_add_event"
+        tools:layout="@layout/fragment_add_event" >
+        <action
+            android:id="@+id/action_addEventFragment_to_discoverFragment"
+            app:destination="@id/discoverFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addMomentFragment"
+        android:name="com.example.dragapp.fragments.moments.AddMomentFragment"
+        android:label="fragment_add_moment"
+        tools:layout="@layout/fragment_add_moment" >
+        <action
+            android:id="@+id/action_addMomentFragment_to_momentsFragment"
+            app:destination="@id/momentsFragment" />
+    </fragment>
 </navigation>
