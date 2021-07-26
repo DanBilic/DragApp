@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class SecondScreen : Fragment() {
 
     companion object{
         private const val CAMERA = 1
+        private const val GALLERY = 2
     }
 
     private var _binding: FragmentSecondScreenBinding? = null
@@ -83,8 +85,9 @@ class SecondScreen : Fragment() {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
             ).withListener(object: PermissionListener{
                 override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                    Toast.makeText(requireContext(), "You have Gallery permission, to select an image!", Toast.LENGTH_SHORT)
-                        .show()
+                    val galleryIntent = Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    startActivityForResult(galleryIntent, GALLERY)
                 }
 
                 override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
@@ -121,6 +124,14 @@ class SecondScreen : Fragment() {
                     binding.profileImage.setImageBitmap(thumbnail)
                 }
             }
+            if(requestCode == GALLERY){
+                data?.let{
+                    val imageUri = data.data
+                    binding.profileImage.setImageURI(imageUri)
+                }
+            }
+        }else if(resultCode == Activity.RESULT_CANCELED){
+            Log.e("CANCELED:", "canceled image selection")
         }
     }
 
