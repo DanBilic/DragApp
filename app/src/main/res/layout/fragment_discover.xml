@@ -7,6 +7,7 @@
     tools:context=".fragments.discover.DiscoverFragment">
 
 
+    <!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/discover_rv"
         android:layout_width="409dp"
@@ -16,6 +17,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+        -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/event_add_button"

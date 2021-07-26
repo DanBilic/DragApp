@@ -8,4 +8,8 @@
     <string name="password">Password</string>
     <string name="name">Name</string>
     <string name="create_account">Create Account</string>
+    <string name="title">Title</string>
+    <string name="add_image">Add Image</string>
+    <string name="description">Description</string>
+    <string name="add">Add</string>
 </resources>

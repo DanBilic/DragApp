@@ -8,12 +8,12 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.dragapp.fragments.profile.ProfileFragment"
-        android:label="fragment_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/discoverFragment"
         android:name="com.example.dragapp.fragments.discover.DiscoverFragment"
-        android:label="fragment_discover"
+        android:label="Discover"
         tools:layout="@layout/fragment_discover" >
         <action
             android:id="@+id/action_discoverFragment_to_addEventFragment"
@@ -22,12 +22,12 @@
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.example.dragapp.fragments.stats.StatsFragment"
-        android:label="fragment_stats"
+        android:label="Stats"
         tools:layout="@layout/fragment_stats" />
     <fragment
         android:id="@+id/momentsFragment"
         android:name="com.example.dragapp.fragments.moments.MomentsFragment"
-        android:label="fragment_moments"
+        android:label="Moments"
         tools:layout="@layout/fragment_moments" >
         <action
             android:id="@+id/action_momentsFragment_to_addMomentFragment"
@@ -36,7 +36,7 @@
     <fragment
         android:id="@+id/addEventFragment"
         android:name="com.example.dragapp.fragments.discover.AddEventFragment"
-        android:label="fragment_add_event"
+        android:label="Add Event"
         tools:layout="@layout/fragment_add_event" >
         <action
             android:id="@+id/action_addEventFragment_to_discoverFragment"
@@ -45,7 +45,7 @@
     <fragment
         android:id="@+id/addMomentFragment"
         android:name="com.example.dragapp.fragments.moments.AddMomentFragment"
-        android:label="fragment_add_moment"
+        android:label="Add Moment"
         tools:layout="@layout/fragment_add_moment" >
         <action
             android:id="@+id/action_addMomentFragment_to_momentsFragment"

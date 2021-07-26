@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.moments.MomentsFragment">
 
+    <!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/moments_rv"
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" >
 
     </androidx.recyclerview.widget.RecyclerView>
+    -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/moment_add_button"
