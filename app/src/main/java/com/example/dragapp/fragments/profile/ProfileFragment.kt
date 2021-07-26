@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.dragapp.api.RetrofitInstance
 import com.example.dragapp.api.RetrofitInterceptor
 import com.example.dragapp.databinding.FragmentProfileBinding
 import com.example.dragapp.repositories.DragRepository
+import com.example.dragapp.utils.Constants.Companion.BASE_URL
 import com.example.dragapp.viewmodels.AppViewModel
 import com.example.dragapp.viewmodels.DragViewModel
 import com.example.dragapp.viewmodels.DragViewModelFactory
@@ -55,19 +57,18 @@ class ProfileFragment : Fragment() {
 
         mDragViewModel.currentUserData.observe(viewLifecycleOwner, Observer { response ->
             if(response.isSuccessful) {
-                Log.d("Profile Body:", response.body()?.success.toString())
-                Log.d("Profile Headers:", response.headers().toString())
-
-                val userName = response.body()?.data.toString()
-                val userEmail = response.body()?.data.toString()
-
-
-                Log.d("Profile name:", userName)
-                Log.d("Profile email:", userEmail)
-
-
+                Log.d("Profile BODY:", response.body()?.data.toString())
                 binding.userNameTv.text =  response.body()?.data?.name.toString()
                 binding.userEmailTv.text =  response.body()?.data?.email.toString()
+
+                response.body()?.data?.let {
+                    val imageUrl = BASE_URL + it.image
+                    Glide.with(this)
+                        .load(imageUrl)
+                        .circleCrop()
+                        .into(binding.userImageIv)
+                }
+
 
             }else{
                 Log.d("Profile Error:", response.errorBody().toString())
