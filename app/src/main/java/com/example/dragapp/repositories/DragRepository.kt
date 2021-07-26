@@ -1,10 +1,9 @@
 package com.example.dragapp.repositories
 
 import com.example.dragapp.api.RetrofitInstance
-import com.example.dragapp.models.Login
-import com.example.dragapp.models.Register
-import com.example.dragapp.models.TokenResult
-import com.example.dragapp.models.Result
+import com.example.dragapp.models.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 class DragRepository {
@@ -19,5 +18,9 @@ class DragRepository {
 
     suspend fun currentUser(): Response<Result>{
         return RetrofitInstance.api.getCurrentUser()
+    }
+
+    suspend fun uploadProfileImage(file: MultipartBody.Part): Response<ImageResult>{
+        return RetrofitInstance.api.uploadProfileImage(file)
     }
 }
