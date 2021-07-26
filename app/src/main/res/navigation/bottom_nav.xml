@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_stats" />
     <fragment
         android:id="@+id/momentsFragment"
-        android:name="com.example.dragapp.MomentsFragment"
+        android:name="com.example.dragapp.fragments.moments.MomentsFragment"
         android:label="fragment_moments"
         tools:layout="@layout/fragment_moments" />
 </navigation>
