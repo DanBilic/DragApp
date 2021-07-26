@@ -79,5 +79,8 @@ dependencies {
     //data store
     implementation"androidx.datastore:datastore-preferences:1.0.0-alpha01"
 
+    // dependency to ask permissions
+    implementation 'com.karumi:dexter:6.2.3'
+
 
 }
