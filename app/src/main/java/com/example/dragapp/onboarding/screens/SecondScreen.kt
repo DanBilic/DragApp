@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.dragapp.R
 import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.databinding.FragmentSecondScreenBinding
@@ -121,13 +122,21 @@ class SecondScreen : Fragment() {
             if(requestCode == CAMERA){
                 data?.extras?.let{
                     val thumbnail : Bitmap = data.extras!!.get("data") as Bitmap
-                    binding.profileImage.setImageBitmap(thumbnail)
+                    // binding.profileImage.setImageBitmap(thumbnail)
+                    Glide.with(this)
+                        .load(thumbnail)
+                        .circleCrop()
+                        .into(binding.profileImage)
                 }
             }
             if(requestCode == GALLERY){
                 data?.let{
                     val imageUri = data.data
-                    binding.profileImage.setImageURI(imageUri)
+                    // binding.profileImage.setImageURI(imageUri)
+                    Glide.with(this)
+                        .load(imageUri)
+                        .circleCrop()
+                        .into(binding.profileImage)
                 }
             }
         }else if(resultCode == Activity.RESULT_CANCELED){
