@@ -4,8 +4,11 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,8 +19,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.dragapp.R
 import com.example.dragapp.databinding.FragmentLoginBinding
 import com.example.dragapp.databinding.FragmentSecondScreenBinding
@@ -30,6 +39,11 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.fragment_second_screen.view.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.util.*
 
 
 class SecondScreen : Fragment() {
@@ -37,10 +51,13 @@ class SecondScreen : Fragment() {
     companion object{
         private const val CAMERA = 1
         private const val GALLERY = 2
+
+        private const val IMAGE_DIRECTORY = "DragAppImages"
     }
 
     private var _binding: FragmentSecondScreenBinding? = null
     private val binding get() = _binding!!
+    private var mImagePath : String = ""
 
 
     override fun onCreateView(
@@ -127,6 +144,9 @@ class SecondScreen : Fragment() {
                         .load(thumbnail)
                         .circleCrop()
                         .into(binding.profileImage)
+
+                    mImagePath = saveImageToInternalStorage(thumbnail)
+                    Log.i("Profile Image PATH:", mImagePath)
                 }
             }
             if(requestCode == GALLERY){
@@ -136,6 +156,33 @@ class SecondScreen : Fragment() {
                     Glide.with(this)
                         .load(imageUri)
                         .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .listener(object: RequestListener<Drawable>{
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                Log.e("ERROR IMAGE:", "error loading image")
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                resource?.let{
+                                    val bitmap: Bitmap = resource.toBitmap()
+                                    mImagePath = saveImageToInternalStorage(bitmap)
+                                }
+                                return false
+                            }
+
+                        })
                         .into(binding.profileImage)
                 }
             }
@@ -160,6 +207,25 @@ class SecondScreen : Fragment() {
             .setNegativeButton("Cancel"){dialog,_ -> dialog.dismiss()}
             .show()
 
+    }
+
+    private fun saveImageToInternalStorage(bitmap: Bitmap):String{
+        val wrapper = ContextWrapper(requireContext().applicationContext)
+
+        var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
+
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream : OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+
+        return file.absolutePath
     }
 
 }
